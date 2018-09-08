@@ -11,7 +11,25 @@
 	<link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
 	<link href='css/stylepantry.css' rel='stylesheet'>
 	<!-- <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
-	
+	<script>
+		 // Initialize the App Client
+      	const client = stitch.Stitch.initializeDefaultAppClient("onlinepantry-kyccp");
+      // Get a MongoDB Service Client
+      	const mongodb = client.getServiceClient(
+        stitch.RemoteMongoClient.factory,
+        "mongodb-atlas"
+      );
+      // Get a reference to the blog database
+      	const db = mongodb.db("OnlinePantry");
+      	function addItem() {
+        	const newItem = document.getElementById("new_item");
+        	console.log("add comment", client.auth.user.id);
+        	console.log(newItem.value);
+        	db.collection("OnlinePantryContents")
+          	.insertOne({ owner_id: client.auth.user.id, comment: newItem.value });
+        	newItem.value = "";
+      }
+	  </script>
     <title>Pantry Content</title>
   </head>
   
@@ -23,7 +41,7 @@
 					 <hr>
 						<div id="OnlinePantryContents"></div>
 						<hr>
-						Add a Comment: <input id="new_item"><input type="submit" onClick="addComment()">
+						Add a Comment: <input id="new_item"><input type="submit" onClick="addItem()">
 					</div>
 			</div>
 	</div>
