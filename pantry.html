@@ -19,6 +19,21 @@
         stitch.RemoteMongoClient.factory,
         "mongodb-atlas"
       );
+	  
+	        function displayComments() {
+		db.collection("comments")
+          .find({}, { limit: 1000 })
+          .asArray()
+          .then(comments => document.getElementById("OnlinePantryContents").innerHTML = comments)
+      }
+	  
+	  function displayCommentsOnLoad() {
+        client.auth
+          .loginWithCredential(new stitch.AnonymousCredential())
+          .then(displayComments)
+          .catch(console.error);
+      }
+	  
       // Get a reference to the blog database
       	const db = mongodb.db("OnlinePantry");
       	function addItem() {
@@ -33,7 +48,7 @@
     <title>Pantry Content</title>
   </head>
   
-  <body>
+  <body onLoad="displayCommentsOnLoad()">
 	<div class="blurred-bg-container">
 		<div class="content">
 			<div class="text">
