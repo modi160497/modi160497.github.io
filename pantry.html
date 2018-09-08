@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.0.0/stitch.js"></script>
+    <!-- Bootstrap CSS -->
+     
+	<link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
+	<link href='css/stylepantry.css' rel='stylesheet'>
+	<!-- <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
+	
+    <title>Pantry Content</title>
+	
+	<script> 
+	
+		import { 
+		Stitch,
+		RemoteMongoClient,
+		AnonymousCredential
+		} from "mongodb-stitch-browser-sdk";
+		
+		
+
+		const client = stitch.Stitch.intializeDefaultAppClient("onlinepantry-kyccp");
+		const mongodb = client.getServiceClient(stitch.RemoteMongoClient.factory,
+        "mongodb-atlas"
+		);
+		const db = mongodb.db("OnlinePantry");
+		
+	   function displayCommentsOnLoad() {
+        client.auth
+          .loginWithCredential(new stitch.AnonymousCredential())
+          .then(displayComments)
+          .catch(console.error);
+      }
+	  
+      function addComment() {
+        const newComment = document.getElementById("new_item");
+        console.log("add comment", client.auth.user.id)
+        db.collection("OnlinePantryContents")
+          .insertOne({ owner_id: client.auth.user.id, comment: newComment.value })
+          .then(displayComments);
+        newComment.value = "";
+      }
+	  
+	        function displayComments() {
+        db.collection("comments")
+          .find({}, { limit: 1000 })
+          .asArray()
+          .then(docs => docs.map(doc => `<div>${doc.comment}</div>`))
+          .then(comments => document.getElementById("comments").innerHTML = comments)
+      }
+	  
+}
+		
+	  </script>
+  </head>
+  
+  <body onload="displayCommentsOnLoad()">
+	<div class="blurred-bg-container">
+		<div class="content">
+			<div class="text">
+				<center><h1>Pantry Items</h1></center>
+					 <hr>
+						<div id="OnlinePantryContents"></div>
+						<hr>
+						Add a Comment: <input id="new_item"><input type="submit" onClick="addComment()">
+					</div>
+			</div>
+	</div>
+  </body>
+</html>

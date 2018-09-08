@@ -1,0 +1,63 @@
+body,
+.blurred-bg-container .content h1 {
+  margin: 0;
+}
+
+h1{
+	color:white;
+	font-family: 'Quicksand';
+	font-size:40px;
+}
+
+.blurred-bg-container {
+  background: url(https://harvest2u.com/wp-content/uploads/2015/07/iStock_67547707_LARGE.jpg);
+  height: 100vh; /* =h */
+  background-size: cover;
+}
+
+.blurred-bg-container .content {
+  background: inherit;
+  width: 60%; /* =cw */
+  height: 40%; /* =ch */
+  border-radius: 8px;
+  box-shadow: 0 0 32px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 50%; /* =ct */
+  left: 50%; /* =cl */
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+}
+
+.blurred-bg-container .text {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.3);
+  height: 100%;
+  box-sizing: border-box; /* so that padding is included in height */
+
+}
+
+.btn-container {
+	padding: 20px;
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+	left: 10%;
+}
+
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+	position: relative;
+    left: 25%;
+	font-family: 'Quicksand';
+
+	
+}
