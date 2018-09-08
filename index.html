@@ -14,7 +14,8 @@
 
       function addComment() {
         const newComment = document.getElementById("new_item");
-        console.log("add comment", client.auth.user.id)
+        console.log("add comment", client.auth.user.id);
+        console.log(newComment.value);
         db.collection("OnlinePantryContents")
           .insertOne({ owner_id: client.auth.user.id, comment: newComment.value });
         newComment.value = "";
