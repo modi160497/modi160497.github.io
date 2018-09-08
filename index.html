@@ -1,49 +1,28 @@
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.0.0/stitch.js"></script>
-    <script>
-      // Initialize the App Client
-      const client = stitch.Stitch.initializeDefaultAppClient("onlinepantry-kyccp");
-      // Get a MongoDB Service Client
-      const mongodb = client.getServiceClient(
-        stitch.RemoteMongoClient.factory,
-        "mongodb-atlas"
-      );
-      // Get a reference to the blog database
-      const db = mongodb.db("OnlinePantry");
-      function displayComments() {
-        db.collection("OnlinePantryContents")
-          .find({}, { limit: 1000 })
-          .asArray()
-          .then(docs => docs.map(doc => `<div>${doc.comment}</div>`))
-          .then(comments => document.getElementById("comments").innerHTML = comments)
-      }
-      function displayCommentsOnLoad() {
-        client.auth
-          .loginWithCredential(new stitch.AnonymousCredential())
-          .then(displayComments)
-          .catch(console.error);
-      }
-      function addComment() {
-        const newComment = document.getElementById("new_comment");
-        console.log("add comment", client.auth.user.id)
-        db.collection("OnlinePantryContents")
-          .insertOne({ owner_id: client.auth.user.id, comment: newComment.value })
-          .then(displayComments);
-        newComment.value = "";
-      }
-    </script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.0.8/stitch.js"></script>
+<script>
+  const client = stitch.Stitch.initializeDefaultAppClient('onlinepantry-kyccp');
+
+  const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('OnlinePantry');
+
+  client.auth.loginWithCredential(new stitch.AnonymousCredential()).then(user => 
+    db.collection('OnlinePantryContents').updateOne({owner_id: client.auth.user.id}, {$set:{number:42}}, {upsert:true})
+  ).then(() => 
+    db.collection('OnlinePantryContents').find({owner_id: client.auth.user.id}, { limit: 100}).asArray()
+  ).then(docs => {
+      console.log("Found docs", docs)
+      console.log("[MongoDB Stitch] Connected to Stitch")
+  }).catch(err => {
+    console.error(err)
+  });
+</script>
   </head>
-
-  <body onLoad="displayCommentsOnLoad()">
-    <h3>This is a great blog post</h3>
-    <div id="content">
-      I like to write about technology because I want to get on the front page of hacker news.
-    </div>
-    <hr>
-    <div id="comments"></div>
-    <hr>
-    Add a Comment: <input id="new_comment"><input type="submit" onClick="addComment()">
+  <body>
+	
   </body>
-
 </html>
