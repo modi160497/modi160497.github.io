@@ -13,50 +13,6 @@
 	<!-- <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
 	
     <title>Pantry Content</title>
-	
-	<script> 
-	
-		import { 
-		Stitch,
-		RemoteMongoClient,
-		AnonymousCredential
-		} from "mongodb-stitch-browser-sdk";
-		
-		
-
-		const client = stitch.Stitch.intializeDefaultAppClient("onlinepantry-kyccp");
-		const mongodb = client.getServiceClient(stitch.RemoteMongoClient.factory,
-        "mongodb-atlas"
-		);
-		const db = mongodb.db("OnlinePantry");
-		
-	   function displayCommentsOnLoad() {
-        client.auth
-          .loginWithCredential(new stitch.AnonymousCredential())
-          .then(displayComments)
-          .catch(console.error);
-      }
-	  
-      function addComment() {
-        const newComment = document.getElementById("new_item");
-        console.log("add comment", client.auth.user.id)
-        db.collection("OnlinePantryContents")
-          .insertOne({ owner_id: client.auth.user.id, comment: newComment.value })
-          .then(displayComments);
-        newComment.value = "";
-      }
-	  
-	        function displayComments() {
-        db.collection("comments")
-          .find({}, { limit: 1000 })
-          .asArray()
-          .then(docs => docs.map(doc => `<div>${doc.comment}</div>`))
-          .then(comments => document.getElementById("comments").innerHTML = comments)
-      }
-	  
-}
-		
-	  </script>
   </head>
   
   <body onload="displayCommentsOnLoad()">
