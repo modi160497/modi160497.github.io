@@ -22,10 +22,15 @@
 	  
 		const db = mongodb.db("OnlinePantry");
 		
-	  
+		
+		function deleteComments(){
+			var coll = mongodb.db("OnlinePantry").collection("OnlinePantryContents");
+			coll.deleteMany({})
+		}
+		
 		function displayComments() {
 			db.collection("OnlinePantryContents").find({}).asArray()
-			  .then(docs => docs.map(doc => ( doc.comment )))
+			  .then(docs => docs.map(doc => ( "<div>" + doc.comment + "</div>" )))
 			  .then(OnlinePantryContentDivs => {
 			      const contentElement = document.getElementById("OnlinePantryContents")
 				  const contentHtml = OnlinePantryContentDivs.join("\n");
@@ -55,7 +60,7 @@
     <title>Pantry Content</title>
   </head>
   
-  <body onLoad="displayCommentsOnLoad()">
+  <body>
 	<div class="blurred-bg-container">
 		<div class="content">
 			<div class="text">
@@ -65,7 +70,9 @@
 						<hr>
 					</div>
 			</div>
+			<div class="submitbtn">Add new Item: <input id="new_item"><input type="submit" onClick="addItem()" value="Add"></div>
+			<input type="button" class="submitbtn" onClick="displayCommentsOnLoad()" value="Show Pantry">
 	</div>
-		Add new Item: <input id="new_item"><input type="submit" onClick="addItem()" value="Add">
+		
   </body>
 </html>

@@ -12,7 +12,7 @@ h1{
 .blurred-bg-container {
   background: url(https://harvest2u.com/wp-content/uploads/2015/07/iStock_67547707_LARGE.jpg);
   height: 100vh; /* =h */
-  background-size: cover;
+  
 }
 
 .blurred-bg-container .content {
@@ -22,7 +22,7 @@ h1{
   border-radius: 8px;
   box-shadow: 0 0 32px rgba(0, 0, 0, 0.5);
   position: absolute;
-  top: 50%; /* =ct */
+  top: 60%; /* =ct */
   left: 50%; /* =cl */
   transform: translate(-50%, -50%);
   overflow: hidden;
@@ -44,7 +44,7 @@ h1{
 	left: 10%;
 }
 
-.button {
+.submitbtn {
     background-color: #4CAF50;
     border: none;
     color: white;
@@ -56,7 +56,8 @@ h1{
     margin: 4px 2px;
     cursor: pointer;
 	position: relative;
-    left: 25%;
+	top: 5%;
+    left: 30%;
 	font-family: 'Quicksand';
 
 	
