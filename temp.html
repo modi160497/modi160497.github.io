@@ -1,29 +1,37 @@
-<!doctype html>
-<html lang="en">
+<html>
   <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.0.0/stitch.js"></script>
-    <!-- Bootstrap CSS -->
-     
-	<link href='https://fonts.googleapis.com/css?family=Quicksand' rel='stylesheet'>
-	<link href='css/style.css' rel='stylesheet'>
-	<!-- <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
-	
-    <title>Online Pantry</title>
+    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.0.0/stitch.js"></script>
+    <script>
+      // Initialize the App Client
+      const client = stitch.Stitch.initializeDefaultAppClient("onlinepantry-kyccp");
+      // Get a MongoDB Service Client
+      const mongodb = client.getServiceClient(
+        stitch.RemoteMongoClient.factory,
+        "mongodb-atlas"
+      );
+      // Get a reference to the blog database
+      const db = mongodb.db("OnlinePantry");
+
+      function addComment() {
+        const newComment = document.getElementById("new_item");
+        console.log("add comment", client.auth.user.id);
+        console.log(newComment.value);
+        db.collection("OnlinePantryContents")
+          .insertOne({ owner_id: client.auth.user.id, comment: newComment.value });
+        newComment.value = "";
+      }
+    </script>
   </head>
+
   <body>
-	<div class="blurred-bg-container">
-		<div class="content">
-			<div class="text">
-				<center><h1>Online Pantry </h1></center>
-				<div class= "btn-container">
-				<a href="pantry.html" class="button">Check Pantry</a>
-				<a href="recipe.html" class="button">Favorite Recipes</a>
-				</div>
-			</div>
-			</div>
-	</div>
+    <h3>This is a great blog post</h3>
+    <div id="content">
+      I like to write about technology because I want to get on the front page of hacker news.
+    </div>
+    <hr>
+    <div id="comments"></div>
+    <hr>
+    Add a Comment: <input id="new_item"><input type="submit" onClick="addComment()">
   </body>
+
 </html>
