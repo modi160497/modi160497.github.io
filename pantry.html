@@ -28,7 +28,7 @@
 			  .then(docs => docs.map(doc => ( doc.comment )))
 			  .then(OnlinePantryContentDivs => {
 			      const contentElement = document.getElementById("OnlinePantryContents")
-				  const contentHtml = OnlinePantryContentDivs.join(", ");
+				  const contentHtml = OnlinePantryContentDivs.join("\n");
 				  contentElement.innerHTML = contentHtml;
 			  })
 		}
