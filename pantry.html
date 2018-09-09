@@ -16,16 +16,23 @@
       	const client = stitch.Stitch.initializeDefaultAppClient("onlinepantry-kyccp");
       // Get a MongoDB Service Client
       	const mongodb = client.getServiceClient(
-        stitch.RemoteMongoClient.factory,
-        "mongodb-atlas"
-      );
+			stitch.RemoteMongoClient.factory,
+			"mongodb-atlas"
+		  );
 	  
-	        function displayComments() {
-		db.collection("comments")
-          .find({}, { limit: 1000 })
-          .asArray()
-          .then(comments => document.getElementById("OnlinePantryContents").innerHTML = comments)
-      }
+		const db = mongodb.db("OnlinePantry");
+		
+	  
+		function displayComments() {
+			db.collection("OnlinePantryContents").find({}).asArray()
+			  .then(docs => docs.map(doc => ( doc.comment )))
+			  .then(OnlinePantryContentDivs => {
+			      const contentElement = document.getElementById("OnlinePantryContents")
+				  const contentHtml = OnlinePantryContentDivs.join(", ");
+				  contentElement.innerHTML = contentHtml;
+			  })
+		}
+      
 	  
 	  function displayCommentsOnLoad() {
         client.auth
@@ -35,13 +42,13 @@
       }
 	  
       // Get a reference to the blog database
-      	const db = mongodb.db("OnlinePantry");
+      	
       	function addItem() {
         	const newItem = document.getElementById("new_item");
-        	console.log("add comment", client.auth.user.id);
+        	console.log("add item", client.auth.user.id);
         	console.log(newItem.value);
         	db.collection("OnlinePantryContents")
-          	.insertOne({ owner_id: client.auth.user.id, comment: newItem.value });
+          	.insertOne({c: newItem.value });
         	newItem.value = "";
       }
 	  </script>
@@ -56,9 +63,9 @@
 					 <hr>
 						<div id="OnlinePantryContents"></div>
 						<hr>
-						Add new Item: <input id="new_item"><input type="submit" onClick="addItem()" value="Add">
 					</div>
 			</div>
 	</div>
+		Add new Item: <input id="new_item"><input type="submit" onClick="addItem()" value="Add">
   </body>
 </html>
